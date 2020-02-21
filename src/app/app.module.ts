@@ -1,18 +1,26 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
-import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MaterialModule } from './material.module';
+import { FeatureListComponent } from './feature-list/feature-list.component';
+import { HttpClientModule } from '@angular/common/http';
+import { FeatureSearch } from './filters/feature-search.pipe'; 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    FeatureListComponent,
+    FeatureSearch,
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    BrowserAnimationsModule,
+    MaterialModule,
+    HttpClientModule
   ],
-  providers: [],
+  providers: [HttpClientModule],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
