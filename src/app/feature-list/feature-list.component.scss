@@ -31,6 +31,21 @@
     left: 50%;
 }
 
+.feature-error-card {
+    // padding: 0px !important;
+}
+
+
+.feature-error-card-content {
+    background-color: #ef5350;
+}
+
+.feature-error-card-actions {
+    // background-color: #ef5350;
+    background-color: white;
+}
+
 mat-card {
     margin-top: .5em;
+    // background-color: #ef5350;
 }

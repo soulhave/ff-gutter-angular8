@@ -6,7 +6,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material.module';
 import { FeatureListComponent } from './feature-list/feature-list.component';
 import { HttpClientModule } from '@angular/common/http';
-import { FeatureSearch } from './filters/feature-search.pipe'; 
+import { FeatureSearch } from './filters/feature-search.pipe';
 
 @NgModule({
   declarations: [

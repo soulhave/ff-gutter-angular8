@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FeaturesService } from '../services/features.service';
-import { filter, flatMap, reduce, map, debounce, toArray } from 'rxjs/operators';
+import { filter, flatMap, reduce, map, debounce, toArray, catchError } from 'rxjs/operators';
 import { Feature } from "../model/feature.model"
-import { interval } from 'rxjs';
+import { empty } from 'rxjs';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-feature-list',
@@ -14,7 +15,7 @@ export class FeatureListComponent implements OnInit {
   features:Feature[] = [];
   showLoad = true;
   errorMessage: string = null;
-  constructor(private service: FeaturesService) { }
+  constructor(private service: FeaturesService, private snackBar: MatSnackBar) { }
 
   ngOnInit() {
     this.getFilteredFeatures(null);
@@ -51,6 +52,14 @@ export class FeatureListComponent implements OnInit {
           acc.push(d);
           return acc;
         }
+      ),
+      catchError(
+        (err, caught) => {
+          this.errorMessage = err.message;
+          console.error("Error Toggle :: ", caught, "::",  err.message);
+          this.handleErrors(err.message);
+          return empty();
+        }
       )
     ).subscribe(      
       (data) => {
@@ -60,8 +69,14 @@ export class FeatureListComponent implements OnInit {
 
         return this.features = data;
       },
-      err => console.log(err),
-      () => this.showLoad = false
+      err => {
+        this.errorMessage = err.message;
+        console.log(err.message);
+        this.handleErrors(err.message);
+      },
+      () => {
+        this.showLoad = false;
+      }
     )
   }
 
@@ -128,6 +143,10 @@ export class FeatureListComponent implements OnInit {
     this.update_list_features(feature, state);
   }
 
+  private handleErrors(err: string): void {
+    this.snackBar.open(err, 'CLOSE', {duration: 5000, horizontalPosition: 'left'});
+  }
+
   private update_list_features(feature: Feature, state: string) {
     feature.sync = true;
     this.service.updateStatus(feature, state).subscribe(
@@ -135,6 +154,14 @@ export class FeatureListComponent implements OnInit {
         let _index = this.features.findIndex(v => v.id == resp.id);
         feature.state = state;
         this.features[_index] = resp;
+        feature.sync = false;
+      },
+      err => {
+        console.error("err", err);
+        this.errorMessage = err.message;
+      },
+      () => {
+        console.info("complete");
         feature.sync = false;
       }
     )

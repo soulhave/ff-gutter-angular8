@@ -4,7 +4,6 @@
 <div class="feature-empty" *ngIf="!showLoad && features.length == 0">
     <mat-card>No features found!</mat-card>
 </div>
-
 <cdk-virtual-scroll-viewport itemSize="50" class="feature-scroll-viewport" *ngIf="!showLoad">
     <!-- <div *cdkVirtualFor="let item of features" class="feature-scroll-viewport-content">
         {{item.id}}
